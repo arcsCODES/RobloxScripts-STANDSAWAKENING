@@ -9,7 +9,8 @@ TUTORIAL FOR LOADING THE SCRIPT: GO TO RAW FILE OF "script.lua" THEN COPY THE LI
 
 
 
-loadstring(game:HttpGet("[put the whole raw link here]"))()
+loadstring(game:HttpGet("PUT THE RAW LINK HERE"))()
+
 
 
 
