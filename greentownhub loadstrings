@@ -6,3 +6,10 @@ v2.1:
 - ADDED PLAYER TELEPORTATION GUI
 - ADDED MAPS
 loadstring(game:HttpGet("https://raw.githubusercontent.com/arcsCODES/RobloxScripts-STANDSAWAKENING/refs/heads/main/greentown_hub_v2_1.lua"))()
+
+v4:
+- NEW GUI
+- FIXED SOME SCRIPTS
+- ADDED TAGGED WORD BYPASS
+- ADDED PLAYER  TELEPORTATION SCRIPT
+loadstring(game:HttpGet("https://raw.githubusercontent.com/arcsCODES/RobloxScripts-STANDSAWAKENING/refs/heads/main/greentownhub_v4.lua"))()
