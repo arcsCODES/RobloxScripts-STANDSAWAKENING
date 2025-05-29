@@ -16,6 +16,8 @@ local Window = Fluent:CreateWindow({
 local Tabs = {
     SCRIPTS = Window:AddTab({ Title = "SCRIPTS", Icon = "align-center" }),
     HBE = Window:AddTab({ Title = "HBE", Icon = "anchor" }),
+    TSSOUND = Window:AddTab({ Title = "TS SOUNDS", Icon = "file-audio" }),
+    SOUNDS = Window:AddTab({ Title = "SOUNDS", Icon = "speaker" }),
     MAP = Window:AddTab({ Title = "MAPA", Icon = "map" }),
     OTHER = Window:AddTab({ Title = "LAING SCRIPTS", Icon = "book" }),
     CREDITS = Window:AddTab({ Title = "CREDITS", Icon = "info" }),
@@ -493,6 +495,171 @@ Tabs.HBE:AddButton({
         end
     end
 })
+
+
+
+
+
+
+
+Tabs.TSSOUND:AddButton({
+    Title = "(OLD) TW OVA",
+    Callback = function()
+        local args = {15, "dioova"}
+        game:GetService("ReplicatedStorage"):WaitForChild("Main"):WaitForChild("Timestop"):FireServer(unpack(args))
+    end
+})
+
+Tabs.TSSOUND:AddButton({
+    Title = "(OLD) JSP PVA",
+    Callback = function()
+        local args = {15, "jotaroova"}
+        game:GetService("ReplicatedStorage"):WaitForChild("Main"):WaitForChild("Timestop"):FireServer(unpack(args))
+    end
+})
+
+Tabs.TSSOUND:AddButton({
+    Title = "JSP TS",
+    Callback = function()
+        local args = {15, "jotaro"}
+        game:GetService("ReplicatedStorage"):WaitForChild("Main"):WaitForChild("Timestop"):FireServer(unpack(args))
+    end
+})
+
+Tabs.TSSOUND:AddButton({
+    Title = "SPTW TS",
+    Callback = function()
+        local args = {15, "P4"}
+        game:GetService("ReplicatedStorage"):WaitForChild("Main"):WaitForChild("Timestop"):FireServer(unpack(args))
+    end
+})
+
+Tabs.TSSOUND:AddButton({
+    Title = "TWOH TS",
+    Callback = function()
+        local args = {15, "diooh"}
+        game:GetService("ReplicatedStorage"):WaitForChild("Main"):WaitForChild("Timestop"):FireServer(unpack(args))
+    end
+})
+
+Tabs.TSSOUND:AddButton({
+    Title = "STW TS",
+    Callback = function()
+        local args = {15, "shadowdio"}
+        game:GetService("ReplicatedStorage"):WaitForChild("Main"):WaitForChild("Timestop"):FireServer(unpack(args))
+    end
+})
+
+Tabs.TSSOUND:AddButton({
+    Title = "TW TS",
+    Callback = function()
+        local args = {15, "theworldnew"}
+        game:GetService("ReplicatedStorage"):WaitForChild("Main"):WaitForChild("Timestop"):FireServer(unpack(args))
+    end
+})
+
+Tabs.TSSOUND:AddButton({
+    Title = "TWAU TS",
+    Callback = function()
+        local args = {15, "diego"}
+        game:GetService("ReplicatedStorage"):WaitForChild("Main"):WaitForChild("Timestop"):FireServer(unpack(args))
+    end
+})
+
+
+
+
+
+
+-- SOUNDS
+local sounds = {}
+local lastPlayedSound
+local soundLoopActive = false
+local soundCount = 1
+local soundLoopConnection
+
+local function getSounds(loc)
+    if loc:IsA("Sound") then
+        table.insert(sounds, loc)
+    end
+    for _, obj in pairs(loc:GetChildren()) do
+        getSounds(obj)
+    end
+end
+
+getSounds(game)
+
+game.DescendantAdded:Connect(function(obj)
+    if obj:IsA("Sound") then
+        table.insert(sounds, obj)
+    end
+end)
+
+local function getRandomSound()
+    if #sounds == 0 then return nil end
+
+    local randomSound
+    local attempt = 0
+    repeat
+        local randomIndex = math.random(1, #sounds)
+        randomSound = sounds[randomIndex]
+        attempt = attempt + 1
+    until randomSound ~= lastPlayedSound or attempt > 10
+
+    if attempt > 10 then return nil end
+    lastPlayedSound = randomSound
+    return randomSound
+end
+
+
+local SoundsToggle = Tabs.SOUNDS:AddToggle("SoundsToggle", {
+    Title = "TOGGLE SOUND",
+    Description = "i-slide sa kong pila ka sounds ang mo gana bago i-toggle",
+    Default = false
+})
+
+SoundsToggle:OnChanged(function(state)
+    soundLoopActive = state
+
+    if state then
+        if not soundLoopConnection then
+            soundLoopConnection = game:GetService("RunService").Heartbeat:Connect(function()
+                if soundLoopActive and #sounds > 0 then
+                    for i = 1, soundCount do
+                        local soundToPlay = getRandomSound()
+                        if soundToPlay then
+                            pcall(function()
+                                soundToPlay:Stop()
+                                soundToPlay:Play()
+                            end)
+                        end
+                    end
+                end
+            end)
+        end
+        print("Sound loop enabled")
+    else
+        if soundLoopConnection then
+            soundLoopConnection:Disconnect()
+            soundLoopConnection = nil
+        end
+        print("Sound loop disabled")
+    end
+end)
+
+local Slider = Tabs.SOUNDS:AddSlider("SoundSlider", {
+    Title = "Sound Count",
+    Description = "Number of sounds to play at once",
+    Default = 2,
+    Min = 0,
+    Max = 100,
+    Rounding = 1,
+    Callback = function(value)
+        soundCount = value
+    end
+})
+
+
 
 
 
